@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://profs.ic.uff.br/~lfignacio/sitemap.xml
