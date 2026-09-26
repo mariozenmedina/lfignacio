@@ -80,6 +80,7 @@ export const content = {
       eyebrow: 'Pesquisa & publicações',
       title: 'Pesquisa em algoritmos, grafos e bioinformática.',
       intro: 'Algoritmos e combinatória para problemas em Bioinformática, Stringologia, Teoria dos Grafos e Computação Quântica.',
+      portraitAlt: 'Luís Felipe Ignácio Cunha em retrato ao ar livre',
       constellation: 'Grafo computacional interativo',
       topicsLabel: 'Temas de pesquisa',
       topicsTitle: 'Principais temas de pesquisa.',
@@ -197,7 +198,7 @@ export const content = {
     },
     research: {
       eyebrow: 'Research & publications', title: 'Research in algorithms, graphs, and bioinformatics.',
-      intro: 'Algorithms and combinatorics for problems in Bioinformatics, Stringology, Graph Theory, and Quantum Computing.', constellation: 'Interactive computational graph',
+      intro: 'Algorithms and combinatorics for problems in Bioinformatics, Stringology, Graph Theory, and Quantum Computing.', portraitAlt: 'Luís Felipe Ignácio Cunha in an outdoor portrait', constellation: 'Interactive computational graph',
       topicsLabel: 'Research topics',
       topicsTitle: 'Main research topics.',
       topics: [
@@ -258,7 +259,7 @@ export const content = {
       personalAlt: 'Luís Felipe Ignácio Cunha sonriendo junto a miniaturas de Star Trek',
     },
     research: {
-      eyebrow: 'Investigación y publicaciones', title: 'Investigación en algoritmos, grafos y bioinformática.', intro: 'Algoritmos y combinatoria para problemas de Bioinformática, Stringología, Teoría de Grafos y Computación Cuántica.', constellation: 'Grafo computacional interactivo',
+      eyebrow: 'Investigación y publicaciones', title: 'Investigación en algoritmos, grafos y bioinformática.', intro: 'Algoritmos y combinatoria para problemas de Bioinformática, Stringología, Teoría de Grafos y Computación Cuántica.', portraitAlt: 'Luís Felipe Ignácio Cunha en un retrato al aire libre', constellation: 'Grafo computacional interactivo',
       topicsLabel: 'Temas de investigación',
       topicsTitle: 'Principales temas de investigación.',
       topics: [

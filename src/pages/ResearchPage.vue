@@ -2,9 +2,9 @@
 import { ArrowRight } from '@lucide/vue'
 import PublicationExplorer from '@/components/research/PublicationExplorer.vue'
 import SectionEyebrow from '@/components/ui/SectionEyebrow.vue'
-import ResearchGraph from '@/components/visual/ResearchGraph.vue'
 import { usePage } from '@/composables/usePage'
 import { useSeo } from '@/composables/useSeo'
+import researchPortrait from '@/assets/images/professor/lf-ignacio-outdoor-profile.jpg'
 
 const { copy } = usePage()
 useSeo({ title: () => copy.value.research.title, description: () => copy.value.research.intro })
@@ -19,7 +19,10 @@ useSeo({ title: () => copy.value.research.title, description: () => copy.value.r
           <h1>{{ copy.research.title }}</h1>
           <p>{{ copy.research.intro }}</p>
         </div>
-        <ResearchGraph :label="copy.research.constellation" />
+        <figure class="teaching-portrait research-portrait">
+          <img :src="researchPortrait" :alt="copy.research.portraitAlt" width="720" height="1280" />
+          <figcaption>UFF · IC · DCC</figcaption>
+        </figure>
       </div>
     </section>
 

@@ -16,7 +16,6 @@
   "dependencies": {
     "@lucide/vue": "^1.25.0",
     "@unhead/vue": "^2.1.16",
-    "three": "^0.186.1",
     "vite-ssg": "^28.3.0",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
