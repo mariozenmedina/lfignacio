@@ -7,51 +7,33 @@ import { allLocalizedPaths } from '../src/router/paths.js'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const dist = path.join(root, 'dist')
-const normalizedBase = (process.env.BASE_PATH || '/~lfignacio/').replace(/^\/+|\/+$/g, '')
-const expectedBase = normalizedBase ? `/${normalizedBase}/` : '/'
 
 const assert = (condition, message) => {
   if (!condition) throw new Error(message)
 }
 
-const htmlFileFor = (route) => path.join(dist, route.replace(/^\//, ''), 'index.html')
-const decodeHtml = (value) => value
-  .replace(/<[^>]*>/g, ' ')
-  .replace(/&amp;/g, '&')
-  .replace(/&#39;|&apos;/g, "'")
-  .replace(/&quot;/g, '"')
-  .replace(/&lt;/g, '<')
-  .replace(/&gt;/g, '>')
-  .replace(/\s+/g, ' ')
-  .trim()
-
 await access(dist)
 
 const uniqueRoutes = [...new Set(allLocalizedPaths)]
 assert(uniqueRoutes.length === 33, `Expected 33 localized routes, found ${uniqueRoutes.length}`)
+assert(uniqueRoutes.every((route) => route.startsWith('/') && route.endsWith('/')), 'Every application route must be hash-compatible')
 
-for (const route of uniqueRoutes) {
-  const file = htmlFileFor(route)
-  await access(file)
-  const html = await readFile(file, 'utf8')
-  const locale = route.split('/')[1]
-  const expectedLang = locale === 'pt' ? 'pt-BR' : locale
-  assert(html.includes(`lang="${expectedLang}"`), `Missing correct html lang in ${route}`)
-  assert(html.includes(`rel="canonical"`), `Missing canonical link in ${route}`)
-  assert(html.includes('hreflang="pt"') && html.includes('hreflang="en"') && html.includes('hreflang="es"'), `Missing hreflang set in ${route}`)
-  assert(html.includes(`${expectedBase}assets/`), `Static base path ${expectedBase} is not present in ${route}`)
-  assert(!html.includes('WhatsApp Image'), `Legacy photo name leaked into ${route}`)
+const rootHtml = await readFile(path.join(dist, 'index.html'), 'utf8')
+assert(rootHtml.includes('./assets/'), 'The SPA entry point must use relative asset URLs')
+assert(!rootHtml.includes('/~lfignacio/'), 'A deployment subfolder leaked into the SPA entry point')
+
+for (const [, reference] of rootHtml.matchAll(/(?:href|src)="([^"?#]+)(?:[?#][^"]*)?"/g)) {
+  if (/^(?:https?:|mailto:|tel:|data:)/.test(reference)) continue
+  assert(!reference.startsWith('/'), `Root-relative build reference found: ${reference}`)
+  await access(path.resolve(dist, reference))
 }
 
-const researchRoutes = ['/pt/pesquisa/', '/en/research/', '/es/investigacion/']
+const mainSource = await readFile(path.join(root, 'src', 'main.js'), 'utf8')
+assert(mainSource.includes('createWebHashHistory()'), 'Vue Router is not using hash history')
+
 const citations = [...journalPublications, ...conferencePublications]
 assert(citations.length === 48, `Expected 48 publications, found ${citations.length}`)
-for (const route of researchRoutes) {
-  const visibleText = decodeHtml(await readFile(htmlFileFor(route), 'utf8'))
-  for (const item of citations) {
-    assert(visibleText.includes(item.citation), `Publication ${item.id} missing from ${route}`)
-  }
-}
+assert(citations.every((item) => item.citation?.trim()), 'Every publication must have a citation')
 
 const materialPaths = [...new Set(courses.flatMap((course) => [...course.materials.slides, ...course.materials.activities].map((item) => item.path)))]
 assert(materialPaths.length === 185, `Expected 185 unique teaching materials, found ${materialPaths.length}`)
@@ -80,4 +62,4 @@ for (const required of ['og.png', 'robots.txt', 'sitemap.xml', 'documents/cv-lui
 const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8')
 assert((sitemap.match(/<url>/g) || []).length === 33, 'Sitemap does not list all localized pages')
 
-console.log(`Validated ${uniqueRoutes.length + 1} static pages, ${citations.length} publications, and ${materialPaths.length} materials (${totalMaterialBytes} bytes).`)
+console.log(`Validated one relocatable hash-routed SPA with ${uniqueRoutes.length} routes, ${citations.length} publications, and ${materialPaths.length} materials (${totalMaterialBytes} bytes).`)

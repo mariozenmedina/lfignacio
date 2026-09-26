@@ -9,15 +9,7 @@ pnpm install
 pnpm dev
 ```
 
-O projeto usa `/~lfignacio/` como subpasta padrão. Para outra subpasta, defina `BASE_PATH` antes de executar o build.
-
-```powershell
-$env:BASE_PATH = '/homologacao/'; pnpm build
-```
-
-```bash
-BASE_PATH=/homologacao/ pnpm build
-```
+O build é independente do caminho de implantação: os assets usam URLs relativas e as páginas são gerenciadas pelo hash da URL. O mesmo conteúdo de `dist/` pode ser publicado na raiz ou em qualquer subpasta.
 
 ## Build estático
 
@@ -26,7 +18,7 @@ pnpm build
 pnpm validate
 ```
 
-O resultado fica em `dist/`. Cada rota possui seu próprio `index.html`, metadados, URL canônica e links `hreflang`.
+O resultado fica em `dist/`. Publique seu conteúdo diretamente no diretório desejado do servidor; não é necessário configurar a subpasta no código.
 
 ## Conteúdo
 
